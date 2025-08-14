@@ -1,0 +1,401 @@
+/* Modern Dark Theme + Glass UI refresh to match reference screenshot */
+:root {
+  --bg-primary: #0b0d10;
+  --bg-secondary: #12151b;
+  --bg-tertiary: #171b23;
+  --surface: #10141a;
+
+  --text-primary: #e6e9ef;
+  --text-secondary: #98a2b3;
+  --text-muted: #7a8796;
+
+  --accent: #60a5fa;        /* light blue accent like the screenshot keys */
+  --accent-strong: #3b82f6;  /* deeper blue for focus/active glows */
+  --accent-hover: #2563eb;
+
+  --border: #253041;
+  --border-soft: #1f2733;
+
+  --success: #10b981;
+  --warning: #f59e0b;
+}
+
+/* Keep original styles (tailwind + inline) working */
+body {
+  font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background:
+    radial-gradient(1200px 600px at 80% -20%, rgba(59, 130, 246, 0.12), transparent 60%),
+    radial-gradient(900px 500px at -10% 20%, rgba(99, 102, 241, 0.12), transparent 60%),
+    linear-gradient(180deg, var(--bg-primary), var(--bg-secondary) 50%, var(--bg-primary) 100%);
+  color: var(--text-primary);
+  min-height: 10vh; 
+}
+
+/* Glass panels */
+.glass-effect {
+  background: linear-gradient(180deg, rgba(20, 26, 36, 0.6), rgba(15, 19, 27, 0.6));
+  border: 1px solid rgba(58, 76, 105, 0.45);
+  border-radius: 16px;
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+  backdrop-filter: blur(14px);
+}
+
+/* Inputs */
+.input-field {
+  background: linear-gradient(180deg, rgba(18, 22, 30, 0.9), rgba(16, 20, 27, 0.9));
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 0.95rem 1.1rem;
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.input-field::placeholder { color: #6b7280; }
+.input-field:focus {
+  border-color: rgba(96,165,250, 0.7);
+  box-shadow: 0 0 0 5px rgba(96,165,250,0.12), inset 0 0 0 1px rgba(96,165,250,0.25);
+}
+
+/* Preview areas */
+.preview-area {
+  background: linear-gradient(180deg, rgba(14, 17, 23, 0.75), rgba(12, 15, 21, 0.75));
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  overflow-y: auto;
+  max-height: 380px;
+}
+.preview-area > div {
+  border-radius: 8px;
+}
+.preview-area > div:hover {
+  background: rgba(44, 56, 75, 0.35) !important;
+}
+
+/* Ensure chromatic notes are always present by default */
+.preview-area[data-filtered="false"] .disabled-note {
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+
+/* Control group bar */
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem;
+  background: linear-gradient(180deg, rgba(17, 21, 28, 0.9), rgba(15, 19, 27, 0.9));
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+/* Toggle switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+}
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+  position: absolute; inset: 0;
+  background: #1c2633;
+  border: 1px solid var(--border);
+  transition: .25s ease;
+  border-radius: 999px;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.35);
+}
+.slider:before {
+  content: "";
+  position: absolute;
+  height: 20px; width: 20px;
+  left: 3px; top: 50%;
+  transform: translateY(-50%);
+  background: linear-gradient(180deg, #eef2ff, #c7d2fe);
+  border-radius: 50%;
+  transition: .25s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+input:checked + .slider {
+  background: linear-gradient(180deg, #1b2a44, #1a2f57);
+  border-color: rgba(96,165,250,0.6);
+  box-shadow: 0 0 0 4px rgba(96,165,250,0.1), inset 0 0 0 1px rgba(96,165,250,0.35);
+}
+input:checked + .slider:before {
+  transform: translate(22px, -50%);
+  background: linear-gradient(180deg, #dbeafe, #93c5fd);
+}
+
+/* Buttons */
+.transpose-btn {
+  width: 36px; /* Reduced from 40px */
+  height: 36px; /* Reduced from 40px */
+  background: linear-gradient(180deg, #0f141c, #0e131a);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-secondary);
+  transition: transform 0.15s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.transpose-btn:hover {
+  color: #dbeafe;
+  border-color: rgba(96,165,250,0.6);
+  box-shadow: 0 0 0 4px rgba(96,165,250,0.12), inset 0 0 0 1px rgba(96,165,250,0.25);
+  transform: translateY(-1px);
+}
+.transpose-btn:active { transform: translateY(0); }
+
+.action-btn {
+  padding: 0.6rem 1rem; /* Reduced from 0.7rem 1.15rem */
+  background: linear-gradient(to right, #60a5fa, #a855f7);
+  color: white;
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: transform 0.15s ease, filter 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  box-shadow: 0 10px 22px rgba(168, 85, 247, 0.25), inset 0 1px 0 rgba(255,255,255,0.08);
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 0.5rem;
+  min-width: 48px; /* Set a minimum width for icon only buttons */
+}
+.action-btn:hover {
+  filter: brightness(1.05);
+  border-color: rgba(168, 85, 247, 0.9);
+  box-shadow: 0 14px 28px rgba(168, 85, 247, 0.35), inset 0 1px 0 rgba(255,255,255,0.12);
+  transform: translateY(-1px);
+}
+
+/* Status messages */
+.status-message {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  transition: all 0.25s ease;
+  border: 1px solid transparent;
+}
+.status-success {
+  background: rgba(16, 185, 129, 0.08);
+  color: #a7f3d0;
+  border-color: rgba(16, 185, 129, 0.35);
+}
+.status-warning {
+  background: rgba(245, 158, 11, 0.08);
+  color: #fcd34d;
+  border-color: rgba(245, 158, 11, 0.35);
+}
+
+/* Helper text */
+.note-info {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.4rem 0;
+  color: var(--text-muted);
+  font-size: 0.86rem;
+}
+
+/* Tabs */
+.tab-button {
+  padding: 0.55rem 0.9rem; /* Reduced from 0.65rem 1.05rem */
+  background: linear-gradient(180deg, rgba(22, 27, 36, 0.7), rgba(16, 20, 28, 0.7));
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  color: var(--text-secondary);
+  font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 0.5rem;
+  min-width: 160px; /* Set a minimum width based on "Name Converter" */
+}
+.tab-button:hover {
+  color: #e5edff;
+  border-color: rgba(96,165,250,0.45);
+  box-shadow: 0 0 0 4px rgba(96,165,250,0.08);
+}
+.tab-button.active {
+  color: white;
+  background: linear-gradient(to right, #60a5fa, #a855f7);
+  border-color: rgba(168, 85, 247, 0.7);
+  box-shadow: 0 10px 24px rgba(168, 85, 247, 0.35), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeIn 0.25s ease-in; }
+
+/* Animations + utils */
+@keyframes fadeIn { from {opacity: 0; transform: translateY(6px);} to {opacity: 1; transform: translateY(0);} }
+.fade-in { animation: fadeIn 0.25s ease-in; }
+.hidden { display: none !important; }
+
+/* Scrollbars */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: rgba(18, 24, 35, 0.7); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #243145, #1e293b);
+  border-radius: 8px;
+  border: 1px solid #1b2433;
+}
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #2f4564, #243145); }
+
+/* =========== Piano Keyboard (styled to match screenshot) =========== */
+.piano {
+  position: relative;
+  max-width: 480px; /* Reduced from 600px */
+  margin: 0 auto; /* Centered */
+  user-select: none;
+  padding-top: 6px;
+}
+
+.white-keys {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+  background: linear-gradient(180deg, #0e131a, #0d1219);
+  padding: 6px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.02),
+    0 10px 24px rgba(0,0,0,0.4);
+}
+
+/* White keys - subtle depth, label at bottom; blue glow when active like image */
+.key.white {
+  position: relative;
+  height: clamp(80px, 15vw, 120px); /* Keep height */
+  background: linear-gradient(180deg, #f7fafc 0%, #eef2f7 45%, #e4e8ee 80%, #d9dde3 100%);
+  color: #0f172a;
+  border-radius: 0 0 10px 10px;
+  border: 1px solid #cfd8e3;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.85),
+    inset 0 -3px 8px rgba(0,0,0,0.12),
+    0 6px 12px rgba(0,0,0,0.18);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 10px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  transition: transform 0.05s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.key.white::after {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: 0 0 10px 10px;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+}
+
+/* Hover lift */
+.key.white:hover { transform: translateY(-1px); }
+
+/* Active/selected state: light-blue accent and glow */
+.key.white.active,
+.key.white[aria-pressed="true"] {
+  background: linear-gradient(180deg, #ecf5ff 0%, #dbeafe 50%, #cfe2ff 100%);
+  border-color: #b9d3ff;
+  color: #0b152a;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.9),
+    inset 0 -3px 10px rgba(37, 99, 235, 0.28),
+    0 0 0 3px rgba(96,165,250,0.22),
+    0 8px 20px rgba(37, 99, 235, 0.25);
+}
+
+/* Black keys layer */
+.black-keys {
+  pointer-events: none; 
+}
+
+.key.black {
+  pointer-events: auto;
+  position: absolute;
+  top: 6px;
+  width: clamp(15px, 2.5vw, 22px); /* Reduced from clamp(18px, 3vw, 28px) */
+  height: clamp(50px, 9vw, 80px); /* Keep height */
+  background: linear-gradient(180deg, #0b0f15 0%, #0f141c 55%, #0a0e14 100%);
+  color: #e5e7eb;
+  border: 1px solid #0e1622;
+  border-radius: 0 0 8px 8px;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.06),
+    inset 0 -3px 10px rgba(0,0,0,0.55),
+    0 10px 22px rgba(0,0,0,0.55);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  transition: transform 0.05s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  z-index: 5;
+}
+
+/* Black key positions aligned between the 7 white keys */
+.piano {
+  
+}
+.black-keys .pos-cs { left: calc((100% / 7) * 1 - (100% / 14)); } 
+.black-keys .pos-ds { left: calc((100% / 7) * 2 - (100% / 14)); } 
+.black-keys .pos-fs { left: calc((100% / 7) * 4 - (100% / 14)); } 
+.black-keys .pos-gs { left: calc((100% / 7) * 5 - (100% / 14)); } 
+.black-keys .pos-as { left: calc((100% / 7) * 6 - (100% / 14)); } 
+
+.key.black:hover {
+  transform: translateX(-50%) translateY(-1px);
+}
+
+/* Active black key: deep-blue rim light like screenshot */
+.key.black.active,
+.key.black[aria-pressed="true"] {
+  background: linear-gradient(180deg, #0b1220 0%, #0d1b2a 55%, #0b1220 100%);
+  border-color: #17305d;
+  box-shadow:
+    inset 0 2px 0 rgba(96,165,250,0.18),
+    inset 0 -4px 12px rgba(37, 99, 235, 0.45),
+    0 0 0 3px rgba(59,130,246,0.18),
+    0 12px 26px rgba(37, 99, 235, 0.28);
+}
+
+/* Press animation */
+.key:active {
+  transform: translateY(1px);
+}
+.key.black:active {
+  transform: translateX(-50%) translateY(1px);
+}
+
+/* Disable state for piano keys */
+.key.white.disabled {
+  background: linear-gradient(180deg, #d1d5db 0%, #9ca3af 45%, #6b7280 80%, #4b5563 100%);
+  color: #374151;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.1), inset 0 -3px 8px rgba(0,0,0,0.2);
+}
+
+.key.black.disabled {
+  background: linear-gradient(180deg, #1f2937 0%, #111827 55%, #0a0e14 100%);
+  border-color: #111827;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,0.03), inset 0 -3px 10px rgba(0,0,0,0.4);
+}
+
+/* New style for converter textarea to match note-info size */
+.converter-textarea-small-text {
+  font-size: 0.86rem; /* Matches the font-size of .note-info */
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .key, .key.white, .key.black,
+  .action-btn, .transpose-btn, .tab-button { transition: none !important; }
+}

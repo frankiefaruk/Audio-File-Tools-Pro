@@ -1,0 +1,218 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Audio File Creator Pro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- New: Link to external CSS file -->
+  <link rel="stylesheet" href="style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "marked": "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js",
+        "dompurify": "https://cdn.jsdelivr.net/npm/dompurify/dist/purify.es.min.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="min-h-screen p-6">
+    <div class="max-w-4xl mx-auto">
+      <!-- Header / Tabs -->
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-2">
+          Audio File Tools Pro
+        </h1>
+        <p class="text-lg text-gray-400">Creating Audio File Names for Sample Libraries</p>
+      </div>
+
+      <div class="flex justify-center mb-8">
+        <div class="glass-effect rounded-xl p-2 flex gap-3">
+          <button class="tab-button active" data-tab="creator">
+            Name Creator
+          </button>
+          <button class="tab-button" data-tab="converter">
+            Name Converter
+          </button>
+        </div>
+      </div>
+
+      <!-- Creator Tab -->
+      <div id="creator" class="tab-content active">
+        <div class="glass-effect rounded-2xl p-8 mb-6">
+          <!-- Input Section -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-300 mb-3">
+              Input Pattern
+            </label>
+            <input
+              type="text"
+              id="inputField"
+              placeholder="Enter Note Range and Instrument Name"
+              class="input-field w-full"
+            />
+            <div class="note-info mt-2">
+              <span id="noteCount" class="font-mono">0 notes</span>
+            </div>
+          </div>
+
+          <!-- Piano Keyboard -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-300 mb-3 text-center">Select Notes (Click to toggle)</label>
+            <div class="piano">
+              <div class="white-keys">
+                <button class="key white" data-note="C" aria-pressed="true">C</button>
+                <button class="key white" data-note="D" aria-pressed="true">D</button>
+                <button class="key white" data-note="E" aria-pressed="true">E</button>
+                <button class="key white" data-note="F" aria-pressed="true">F</button>
+                <button class="key white" data-note="G" aria-pressed="true">G</button>
+                <button class="key white" data-note="A" aria-pressed="true">A</button>
+                <button class="key white" data-note="B" aria-pressed="true">B</button>
+              </div>
+              <div class="black-keys">
+                <button class="key black pos-cs" data-note="C#" aria-pressed="false">C#</button>
+                <button class="key black pos-ds" data-note="D#" aria-pressed="false">D#</button>
+                <button class="key black pos-fs" data-note="F#" aria-pressed="false">F#</button>
+                <button class="key black pos-gs" data-note="G#" aria-pressed="false">G#</button>
+                <button class="key black pos-as" data-note="A#" aria-pressed="false">A#</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Controls -->
+          <div class="control-group mb-6">
+            <div class="flex items-center gap-3">
+              <label class="toggle-switch">
+                <input type="checkbox" id="enharmonicShift" />
+                <span class="slider"></span>
+              </label>
+              <span class="text-sm font-medium">Use Flat Notes (♭)</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <span class="text-sm font-medium mr-2">Transpose:</span>
+              <button id="octaveDown" class="transpose-btn" title="Down 1 octave">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M16 12l-4 4-4-4h8z"/>
+                </svg>
+              </button>
+              <span id="transposeValue" class="font-mono text-sm min-w-[3rem] text-center">0</span>
+              <button id="octaveUp" class="transpose-btn" title="Up 1 octave">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 12l4-4 4 4H8z"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="flex gap-3 ml-auto">
+              <button id="copyButton" class="action-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                </svg>
+                
+              </button>
+              <button id="downloadButton" class="action-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                </svg>
+                
+              </button>
+            </div>
+          </div>
+
+          <!-- Preview Section -->
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-300 mb-3">Generated File Names</label>
+            <div id="preview" class="preview-area"></div>
+          </div>
+
+          <!-- Status -->
+          <div id="status" class="status-message hidden"></div>
+        </div>
+
+        <!-- Examples -->
+        <div class="glass-effect rounded-xl p-6">
+          <h3 class="text-lg font-semibold mb-4 text-gray-400">Supported Input Formats</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <div class="font-mono text-blue-400">C3-C4-Bass-Pizz</div>
+              <div class="text-gray-500">Standard range with dash</div>
+            </div>
+            <div>
+              <div class="font-mono text-blue-400">C3,D3,E3-MySound</div>
+              <div class="text-gray-500">Comma-separated notes</div>
+            </div>
+            <div>
+              <div class="font-mono text-blue-400">C3C4D4E4-Instrument</div>
+              <div class="text-gray-500">Concatenated notes</div>
+            </div>
+            <div>
+              <div class="font-mono text-blue-400">C#3-F4-Strings-Stac</div>
+              <div class="text-gray-500">Sharps supported; toggle flats for Db/Eb/etc.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Converter Tab -->
+      <div id="converter" class="tab-content">
+        <div class="glass-effect rounded-2xl p-8 mb-6">
+          <!-- Input Section -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-300 mb-3">
+              Paste Audio File Names <span class="text-blue-400">(one per line)</span>
+            </label>
+            <textarea
+              id="converterInput"
+              placeholder="76_Dist_Cra_0836-B6-V127-1JS5.wav&#10;76_Dist_Cra_0836-B6-V127-2JS5.wav&#10;77_Dist_Cra_0837-C7-V127-1AB2.wav"
+              class="input-field w-full h-48 resize-none converter-textarea-small-text"
+            ></textarea>
+            <div class="note-info mt-2">
+              <span>Automatically removes existing _RR and reorganizes sequences</span>
+              <span id="converterFileCount" class="font-mono">0 files</span>
+            </div>
+          </div>
+
+          <!-- Controls -->
+          <div class="control-group mb-6">
+            <div class="flex items-center gap-3">
+              <label class="toggle-switch">
+                <input type="checkbox" id="addMidiNumber" />
+                <span class="slider"></span>
+              </label>
+              <span class="text-sm font-medium">Add Midi Number</span>
+            </div>
+
+            <div class="flex gap-3 ml-auto">
+              <button id="converterCopyButton" class="action-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                </svg>
+                
+              </button>
+              <button id="converterDownloadButton" class="action-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                </svg>
+                
+              </button>
+            </div>
+          </div>
+
+          <!-- Preview Section -->
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-300 mb-3">Converted File Names</label>
+            <div id="converterPreview" class="preview-area"></div>
+          </div>
+
+          <!-- Status -->
+          <div id="converterStatus" class="status-message hidden"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- New: Import main application logic -->
+  <script type="module" src="main.js"></script>
+</body>
+</html>
